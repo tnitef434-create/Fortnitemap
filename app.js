@@ -36,132 +36,205 @@ document.addEventListener('DOMContentLoaded', () => {
     // 2. Real Fortnite Map Loot Spawns (Chapter 7 Season 2 - Showdown)
     // -------------------------------------------------------------
     const defaultMarkers = [
-        // Mythic Bosses
+        // Mythic Bosses (Confirmed Spawns & Drops)
         {
             id: 'boss-ice-king',
             type: 'boss',
-            title: 'The Ice King (Boss)',
+            title: 'The Ice King (Mythic Boss)',
             coords: [1369.1, 1004.4],
-            desc: 'Spawns at the center of Frigid Fortress. Defeat him to get Ice King\'s Gauntlets (Mythic) and a Vault Keycard.',
-            votes: 488,
+            desc: 'Spawns at the peak of Frigid Fortress. Defeat him to drop Ice King\'s Gauntlets (Mythic) and the Ice King Vault Keycard.',
+            votes: 845,
             rate: 100,
             comments: [
-                { author: 'ChampsIce', text: 'Drops the gauntlets which grant frost jump and slam. Very OP!', time: '1 hour ago' },
-                { author: 'LootSeeker', text: 'His fortress has a lot of verticality. Watch out for snipers.', time: '1 day ago' }
+                { author: 'FrostyPro', text: 'Gauntlets let you do a huge frost jump and slam. Watch out for his ice freeze blast!', time: '2 hours ago' },
+                { author: 'NinjaFans', text: 'Spawns inside the fortress throne room on the top level.', time: '1 day ago' }
             ]
         },
         {
             id: 'boss-dark-voyager',
             type: 'boss',
-            title: 'Dark Voyager (Boss)',
+            title: 'Dark Voyager (Mythic Boss)',
             coords: [1025.0, 891.8],
-            desc: 'Located inside the main reactor core at Dark Dominion. Drops Dark Voyager\'s Obliterator (Mythic Shotgun) and Vault Keycard.',
-            votes: 521,
+            desc: 'Located inside the command deck at Dark Dominion. Drops Dark Voyager\'s Obliterator (Mythic Shotgun) and Vault Keycard.',
+            votes: 792,
             rate: 100,
             comments: [
-                { author: 'ShottyMain', text: 'Drops the best shotgun this season. Spawns in the basement control room.', time: '4 hours ago' }
+                { author: 'ShottyGod', text: 'The shotgun hits for 120 body damage. Aim for the head!', time: '5 hours ago' }
             ]
         },
         {
             id: 'boss-squibbly',
             type: 'boss',
-            title: 'Squibbly (Boss)',
+            title: 'Squibbly (Mythic Boss)',
             coords: [1020.4, 557.9],
-            desc: 'Wanders the pier boardwalk at Squibbly Shores. Drops Squibbly\'s Combat Assault Rifle (Mythic).',
-            votes: 395,
+            desc: 'Patrols the beachfront boardwalk at Squibbly Shores. Drops Squibbly\'s Combat Assault Rifle (Mythic).',
+            votes: 624,
             rate: 100,
             comments: [
-                { author: 'BeachGlide', text: 'Keep distance; his rifle has laser accuracy.', time: '12 hours ago' }
+                { author: 'AssaultMain', text: 'His AR has zero recoil. Super easy to laser people at long range.', time: '3 hours ago' }
             ]
         },
         {
             id: 'boss-zadie',
             type: 'boss',
-            title: 'Zadie (Boss)',
+            title: 'Zadie (Mythic Boss)',
             coords: [950.0, 700.0],
-            desc: 'Patrols the dense woodlands north of Squibbly Shores. Drops Zadie\'s Suppressed SMG (Mythic).',
-            votes: 219,
+            desc: 'Patrols the forests north of Squibbly Shores. Drops Zadie\'s Suppressed SMG (Mythic).',
+            votes: 388,
             rate: 100,
             comments: [
-                { author: 'Ghosty', text: 'She uses active camo! Listen for the low humming sound.', time: '8 hours ago' }
+                { author: 'CamoHunter', text: 'She uses active camouflage, look for a slight shimmer in the trees!', time: '12 hours ago' }
             ]
         },
 
-        // Vaults
+        // High-Tier Vaults
+        {
+            id: 'vault-ice-king',
+            type: 'vault',
+            title: 'Ice King Vault (Frigid Fortress)',
+            coords: [1204.6, 1004.4],
+            desc: 'Underground dungeon vault at Frigid Fortress. Requires the Ice King\'s Vault Keycard. Contains 3 guaranteed Rare Chests, legendary weapon drops, and 4 Slurp Barrels.',
+            votes: 654,
+            rate: 100,
+            comments: [
+                { author: 'LootSeeker', text: 'The entrance is down the spiral stairs in the central courtyard.', time: '1 hour ago' }
+            ]
+        },
         {
             id: 'vault-sanctuary',
             type: 'vault',
-            title: 'New Sanctuary Vault',
+            title: 'New Sanctuary Sub-Vault',
             coords: [640.0, 1285.0],
-            desc: 'Located at the subterranean base of New Sanctuary. Requires finding a Sanctuary Keycard. Contains 3 Rare Chests.',
-            votes: 412,
+            desc: 'Requires Sanctuary security keycard to scan. Holds 2 Rare Chests, 4 normal chests, and a Weapon Mod Bench.',
+            votes: 512,
             rate: 100,
             comments: [
-                { author: 'VaultCracker', text: 'Inside the tunnel network. High tier loot benchmark.', time: '2 hours ago' }
+                { author: 'ModGod', text: 'Great spot to add thermal scopes and drum mags to your weapons.', time: '8 hours ago' }
             ]
         },
         {
-            id: 'vault-frigid',
+            id: 'vault-order-crash',
             type: 'vault',
-            title: 'Frigid Fortress Vault',
-            coords: [1350.0, 950.0],
-            desc: 'South of Frigid Fortress. Needs the Ice King\'s keycard to open. Guaranteed 2 Legendary items.',
-            votes: 304,
-            rate: 100,
+            title: 'Seven Compound Vault (Crash Site)',
+            coords: [505.6, 1230.7],
+            desc: 'Located inside the cargo hold of the crashed Seven ship. Requires dual scan or keycard to open. Guaranteed exotics.',
+            votes: 295,
+            rate: 95,
             comments: [
-                { author: 'ColdVault', text: 'Usually spawns with 3 shield barrels outside the door.', time: '2 days ago' }
+                { author: 'SevenLore', text: 'Usually spawns a legendary sniper and lots of shields.', time: '2 days ago' }
             ]
         },
 
-        // Rare Chests (Confirmed Spawns)
+        // Confirmed Rare Chests (Secret Rooms & Bunkers)
         {
             id: 'rare-chest-piano',
             type: 'rare-chest',
-            title: 'Secret Piano Room Rare Chest',
-            coords: [600.0, 1200.0],
-            desc: 'Access by breaking a fake wall in the underground bunker network near New Sanctuary.',
-            votes: 567,
+            title: 'Guaranteed Rare Chest (Mezzo-Piano Tunnel)',
+            coords: [1073.7, 1022.1],
+            desc: 'Secret room inside the Mezzo-Piano Tunnel. Break the fake brick wall behind the coral buddies sitting on crates to access.',
+            votes: 912,
             rate: 100,
             comments: [
-                { author: 'PianoMan', text: '100% spawn rate. Break the bookshelf next to the piano.', time: '30 mins ago' }
+                { author: 'CoralFan', text: 'Easiest guaranteed rare chest spawn in Chapter 7. High-density loot spot!', time: '15 mins ago' },
+                { author: 'TfueFan', text: 'Always has a gold weapon. Safe landing if you drop early.', time: '2 hours ago' }
             ]
         },
         {
             id: 'rare-chest-carmine',
             type: 'rare-chest',
-            title: 'Carmine Lodge Drawer Rare Chest',
-            coords: [982.1, 1015.2],
-            desc: 'Disguised as a dresser/drawer on the second floor of Carmine Lodge. Destroy the picture frame next to it to unlock.',
-            votes: 283,
-            rate: 88,
+            title: 'Carmine Lodge Dresser Rare Chest',
+            coords: [982.2, 1015.2],
+            desc: 'Second floor of Carmine Lodge. It is disguised as a dresser. Break the picture frame next to it to open the dresser.',
+            votes: 472,
+            rate: 94,
             comments: [
-                { author: 'LodgeHunter', text: 'Super easy drop spot. Almost always a gold weapon inside.', time: '3 hours ago' }
+                { author: 'LodgeLoot', text: 'Very hidden! Do not pickaxe the dresser itself or it destroys the chest.', time: '3 hours ago' }
+            ]
+        },
+        {
+            id: 'rare-chest-bigfoot',
+            type: 'rare-chest',
+            title: 'Bigfoot\'s Cave Hidden Rare Chest',
+            coords: [1412.8, 576.3],
+            desc: 'Located at the very back of Bigfoot\'s Cave behind a stack of sleeping bags. Destroy the sleeping bags to reveal the chest.',
+            votes: 310,
+            rate: 90,
+            comments: [
+                { author: 'MythHunter', text: 'Also spawns a few slurp mushrooms on the floor.', time: '5 hours ago' }
+            ]
+        },
+        {
+            id: 'rare-chest-trog',
+            type: 'rare-chest',
+            title: 'Trog\'s Ice Cave Rare Chest',
+            coords: [1289.9, 1139.3],
+            desc: 'Frozen inside a block of ice in Trog\'s Cave. Hit the ice block 5 times with your pickaxe to thaw and open it.',
+            votes: 245,
+            rate: 92,
+            comments: [
+                { author: 'IceBreaker', text: 'Located in the frozen ravine area under Frigid Fortress.', time: '1 day ago' }
+            ]
+        },
+        {
+            id: 'rare-chest-frozen-shard',
+            type: 'rare-chest',
+            title: 'Frozen Crystal Rare Chest',
+            coords: [1364.0, 902.9],
+            desc: 'Buried under a glowing blue crystal shard near the frozen lake. Break the crystal shard to open.',
+            votes: 189,
+            rate: 85,
+            comments: [
+                { author: 'CrystalCollect', text: 'Make sure you have full health, breaking the shard inflicts minor cold damage.', time: '12 hours ago' }
+            ]
+        },
+        {
+            id: 'rare-chest-lighthouse',
+            type: 'rare-chest',
+            title: 'Squibbly Shores Lighthouse Rare Chest',
+            coords: [984.3, 412.2],
+            desc: 'Spawns at the very top of Squibbly Shores Lighthouse behind the searchlight controls.',
+            votes: 504,
+            rate: 95,
+            comments: [
+                { author: 'BeaconLoot', text: 'Land here directly from the bus. Great starting vantage point.', time: '4 hours ago' }
             ]
         },
 
-        // Exotic / Legendary Weapon Sites
+        // Exotic / Legendary Weapon Drops & Sellers
         {
             id: 'exotic-chug-cannon',
             type: 'exotic-weapon',
-            title: 'Chug Cannon (Exotic)',
-            coords: [1010.0, 530.0],
-            desc: 'Purchased from the Fisherman NPC on the pier at Squibbly Shores for 600 Gold.',
-            votes: 442,
+            title: 'Chug Cannon (Exotic Seller)',
+            coords: [530.0, 1010.0],
+            desc: 'Sold by the Fisherman NPC on the pier at Squibbly Shores for 600 Gold.',
+            votes: 592,
             rate: 100,
             comments: [
-                { author: 'SquadHealer', text: 'Essential for heals, recharging is fairly quick.', time: '1 hour ago' }
+                { author: 'Chugger', text: 'Heals shields for your entire squad, has a 20s cooldown per charge.', time: '2 hours ago' }
             ]
         },
         {
-            id: 'legendary-sniper',
+            id: 'legendary-sniper-seller',
             type: 'legendary-weapon',
             title: 'Legendary Heavy Sniper / Grapple Blade',
             coords: [1538.3, 1224.0],
             desc: 'Sold by the Tactical NPC at Latte Landing for 400 Gold.',
-            votes: 319,
+            votes: 418,
+            rate: 100,
+            comments: [
+                { author: 'GrappleKing', text: 'Get the grapple blade here, it makes navigating the cliffs extremely easy.', time: '1 hour ago' }
+            ]
+        },
+        {
+            id: 'legendary-lightning-gun',
+            type: 'legendary-weapon',
+            title: 'Guaranteed Arc Lightning Gun (Area 51 Bunker)',
+            coords: [1371.5, 430.3],
+            desc: 'Hidden inside the pyramid bunker basement. Activate the red blast door switch to open the vault containing this legendary gun.',
+            votes: 629,
             rate: 95,
             comments: [
-                { author: 'SniperAim', text: 'Easy rotation. Buy the Grapple Blade for mountain climbing.', time: '5 hours ago' }
+                { author: 'TeslaFan', text: 'Shoots chain lightning that damages multiple enemies. Awesome for squad matches!', time: '30 mins ago' }
             ]
         }
     ];
