@@ -52,6 +52,24 @@
                     </button>
                 </div>
             </div>
+            
+            <!-- Rotation Route Planner -->
+            <div class="filter-section">
+                <h2><i class="fa-solid fa-route"></i> Rotation Planner</h2>
+                <div class="route-controls">
+                    <button class="filter-btn" id="btnToggleRouteMode" style="--accent-color: #ff3333;">
+                        <i class="fa-solid fa-pen-nib"></i> Draw Route (Red Lines)
+                    </button>
+                    <div class="route-actions form-row hidden" id="routeActions" style="margin-top: 10px; display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                        <button type="button" class="btn btn-cancel-marker" id="btnUndoRoute" style="font-size: 11px; padding: 6px;">
+                            <i class="fa-solid fa-rotate-left"></i> Undo Point
+                        </button>
+                        <button type="button" class="btn btn-flag" id="btnClearRoute" style="font-size: 11px; padding: 6px;">
+                            <i class="fa-solid fa-trash-can"></i> Clear Route
+                        </button>
+                    </div>
+                </div>
+            </div>
 
             <!-- Stats/Loot Info Panel -->
             <div class="details-panel" id="detailsPanel">

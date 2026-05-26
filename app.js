@@ -236,6 +236,78 @@ document.addEventListener('DOMContentLoaded', () => {
             comments: [
                 { author: 'TeslaFan', text: 'Shoots chain lightning that damages multiple enemies. Awesome for squad matches!', time: '30 mins ago' }
             ]
+        },
+        {
+            id: 'rare-chest-sticks',
+            type: 'rare-chest',
+            title: 'Sticks Pier Shipwreck Rare Chest',
+            coords: [892.6, 369.7],
+            desc: 'Under the floorboards of the sunken wooden shipwreck at the end of the Sticks pier.',
+            votes: 215,
+            rate: 90,
+            comments: [
+                { author: 'PirateLoot', text: 'Spawns inside the water-logged hull. Break the crates to see it.', time: '4 hours ago' }
+            ]
+        },
+        {
+            id: 'legendary-vending-pizza',
+            type: 'legendary-weapon',
+            title: 'Pizza Pit Legendary Vendor',
+            coords: [733.0, 1102.2],
+            desc: 'Vending machine outside Uncle Pete\'s Pizza Pit. Sells legendary pizza box heals and legendary weapon components.',
+            votes: 310,
+            rate: 100,
+            comments: [
+                { author: 'PizzaLover', text: 'Pizza boxes heal 100 shield/health instantly. Highly recommended!', time: '20 mins ago' }
+            ]
+        },
+        {
+            id: 'exotic-burger-drops',
+            type: 'exotic-weapon',
+            title: 'Cosmic Durr exotic burger drops',
+            coords: [731.1, 1169.3],
+            desc: 'Behind the kitchen counter at Cosmic Durr. Break the metal cabinet to find 2 exotic durr burgers.',
+            votes: 184,
+            rate: 82,
+            comments: [
+                { author: 'BurgerKing', text: 'Eating the burger grants low-gravity jump effect for 30 seconds.', time: '2 hours ago' }
+            ]
+        },
+        {
+            id: 'legendary-vending-shotgun',
+            type: 'legendary-weapon',
+            title: 'Artsy RVs Weapon Vending Machine',
+            coords: [610.9, 1449.5],
+            desc: 'Vending machine behind the central red RV trailer. Sells Legendary Combat Shotguns.',
+            votes: 220,
+            rate: 100,
+            comments: [
+                { author: 'ShotgunFan', text: 'Costs 400 gold bars. Perfect drop rotation after landing Wonkeeland.', time: '1 day ago' }
+            ]
+        },
+        {
+            id: 'rare-chest-pawsy',
+            type: 'rare-chest',
+            title: 'Pawsy Peak Cabin Attic Rare Chest',
+            coords: [1542.9, 774.9],
+            desc: 'Hidden attic room of the wooden hunting cabin at Pawsy Peak. Break the chimney stack to drop into the secret space.',
+            votes: 295,
+            rate: 93,
+            comments: [
+                { author: 'Climber', text: 'Land on the roof and pickaxe straight down. It\'s always there!', time: '6 hours ago' }
+            ]
+        },
+        {
+            id: 'legendary-wonkeeland-tower',
+            type: 'legendary-weapon',
+            title: 'Wonkeeland Water Tower Legendary Chest',
+            coords: [1437.5, 695.5],
+            desc: 'Inside the metallic water tower cylinder at Wonkeeland. Break the tower support structures or build up to open.',
+            votes: 388,
+            rate: 98,
+            comments: [
+                { author: 'Wonkee', text: 'Breaking the base of the tower collapses it and drops the chest contents on the floor.', time: '2 hours ago' }
+            ]
         }
     ];
 
@@ -373,14 +445,53 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // -------------------------------------------------------------
-    // 6. Map Interactivity & Custom Markers Submission
+    // 6. Map Interactivity & Custom Markers Submission / Route drawing
     // -------------------------------------------------------------
+    let routeMode = false;
+    let routePoints = JSON.parse(localStorage.getItem('fortnite_route_points')) || [];
+    let routeLine = null;
+    let routeMarkers = [];
+
+    function drawRoute() {
+        if (routeLine) {
+            map.removeLayer(routeLine);
+        }
+        routeMarkers.forEach(m => map.removeLayer(m));
+        routeMarkers = [];
+
+        if (routePoints.length === 0) return;
+
+        // Draw the red polyline
+        routeLine = L.polyline(routePoints, { color: '#ff3333', weight: 4, opacity: 0.9 }).addTo(map);
+
+        // Draw red dot circle markers at each point
+        routePoints.forEach((pt, index) => {
+            const m = L.circleMarker(pt, {
+                radius: 6,
+                color: '#ff3333',
+                fillColor: '#000000',
+                fillOpacity: 0.8,
+                weight: 2
+            }).addTo(map);
+            m.bindTooltip(`Point ${index + 1}`, { permanent: false, direction: 'top' });
+            routeMarkers.push(m);
+        });
+
+        localStorage.setItem('fortnite_route_points', JSON.stringify(routePoints));
+    }
+
     map.on('mousemove', (e) => {
         document.getElementById('hudLat').innerText = e.latlng.lat.toFixed(1);
         document.getElementById('hudLng').innerText = e.latlng.lng.toFixed(1);
     });
 
     map.on('click', (e) => {
+        if (routeMode) {
+            routePoints.push([e.latlng.lat, e.latlng.lng]);
+            drawRoute();
+            return;
+        }
+
         // If clicking map outside markers, open add marker flow
         tempClickLatLng = [e.latlng.lat, e.latlng.lng];
         
@@ -507,9 +618,13 @@ document.addEventListener('DOMContentLoaded', () => {
         btn.addEventListener('click', () => {
             const filterVal = btn.dataset.filter;
 
+            // Skip if it is the route mode toggle button
+            if (btn.id === 'btnToggleRouteMode') return;
+
             if (filterVal === 'all') {
                 const willBeActive = !btn.classList.contains('active');
                 filterButtons.forEach(b => {
+                    if (b.id === 'btnToggleRouteMode') return;
                     if (willBeActive) {
                         b.classList.remove('inactive');
                         b.classList.add('active');
@@ -527,7 +642,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 // If any filter is disabled, "All" filter button is unchecked
                 const allBtn = document.querySelector('.filter-btn[data-filter="all"]');
-                const anyInactive = Array.from(filterButtons).some(b => b.dataset.filter !== 'all' && b.classList.contains('inactive'));
+                const anyInactive = Array.from(filterButtons).some(b => b.id !== 'btnToggleRouteMode' && b.dataset.filter !== 'all' && b.classList.contains('inactive'));
                 if (anyInactive) {
                     allBtn.classList.remove('active');
                     allBtn.classList.add('inactive');
@@ -558,6 +673,38 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    // -------------------------------------------------------------
+    // 11. Rotation Route Planner Controls
+    // -------------------------------------------------------------
+    const btnToggleRouteMode = document.getElementById('btnToggleRouteMode');
+    const routeActions = document.getElementById('routeActions');
+    const btnUndoRoute = document.getElementById('btnUndoRoute');
+    const btnClearRoute = document.getElementById('btnClearRoute');
+
+    btnToggleRouteMode.addEventListener('click', () => {
+        routeMode = !routeMode;
+        if (routeMode) {
+            btnToggleRouteMode.classList.add('active');
+            btnToggleRouteMode.innerHTML = '<i class="fa-solid fa-square-check"></i> Drawing Mode (Click Map)';
+            routeActions.classList.remove('hidden');
+        } else {
+            btnToggleRouteMode.classList.remove('active');
+            btnToggleRouteMode.innerHTML = '<i class="fa-solid fa-pen-nib"></i> Draw Route (Red Lines)';
+            routeActions.classList.add('hidden');
+        }
+    });
+
+    btnUndoRoute.addEventListener('click', () => {
+        routePoints.pop();
+        drawRoute();
+    });
+
+    btnClearRoute.addEventListener('click', () => {
+        routePoints = [];
+        drawRoute();
+    });
+
     // Initial render
     renderMarkers();
+    drawRoute(); // Restore any previous route from localStorage
 });
