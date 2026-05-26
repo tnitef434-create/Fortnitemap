@@ -1,4 +1,4 @@
-// Fortnite Chapter 7 Season 2 Interactive Loot Map
+// Fortnite Interactive Loot Map (Helios Map)
 // Powered by Leaflet.js
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -24,8 +24,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // Map bounds
     const bounds = [[0, 0], [mapHeight, mapWidth]];
     
-    // Add custom generated Fortnite map
-    const mapOverlay = L.imageOverlay('fortnite_map_chapter7.png', bounds).addTo(map);
+    // Add real Fortnite Chapter 5 Season 1 map image from CDN
+    const mapOverlay = L.imageOverlay('https://static.wikia.nocookie.net/fortnite/images/2/21/Helios_%28Update_v28.00%29_-_Island_-_Fortnite.png/revision/latest?cb=20231206212959', bounds).addTo(map);
     map.fitBounds(bounds);
 
     // Track active marker clicked coordinates for the "Add Marker" flow
@@ -33,172 +33,185 @@ document.addEventListener('DOMContentLoaded', () => {
     let selectedMarker = null;
 
     // -------------------------------------------------------------
-    // 2. Mock & Default Spawns (Chapter 7 Season 2 "Showdown")
+    // 2. Real Fortnite Map Loot Spawns (Helios Map)
     // -------------------------------------------------------------
     const defaultMarkers = [
         // Mythic Bosses
         {
-            id: 'boss-ice-king',
+            id: 'boss-oscar',
             type: 'boss',
-            title: 'The Ice King (Boss)',
-            coords: [1600, 500],
-            desc: 'Resides at the center of Frigid Fortress. Drops Ice King\'s Gauntlets (Mythic) and Vault Keycard.',
-            votes: 215,
+            title: 'Oscar (Boss)',
+            coords: [1417.5, 940.5],
+            desc: 'Located inside the main mansion at Lavish Lair. Defeat him to get Oscar\'s Frenzy Auto Shotgun (Mythic) and his Society Medallion.',
+            votes: 512,
             rate: 100,
             comments: [
-                { author: 'LootSeeker', text: 'Spawns inside the main throne hall. Bring shields!', time: '2 hours ago' },
-                { author: 'NinjaFan99', text: 'Confirmed. Very high HP but gauntlets are overpowered.', time: '1 day ago' }
+                { author: 'ShottyGod', text: 'His auto shotgun is insane for close combat. Try to keep distance.', time: '2 hours ago' },
+                { author: 'LootGamer', text: 'Spawns in the central ballroom floor.', time: '1 day ago' }
             ]
         },
         {
-            id: 'boss-dark-voyager',
+            id: 'boss-valeria',
             type: 'boss',
-            title: 'Dark Voyager (Boss)',
-            coords: [600, 1500],
-            desc: 'Located deep inside Dark Dominion. Drops Dark Voyager\'s Obliterator (Mythic Shotgun) and Vault Keycard.',
-            votes: 189,
+            title: 'Valeria (Boss)',
+            coords: [1097.5, 1343.7],
+            desc: 'Located in the grand railway station at Reckless Railways. Defeat her to get Valeria\'s Hyper SMG (Mythic) and her Society Medallion.',
+            votes: 418,
             rate: 100,
             comments: [
-                { author: 'ChampsPlayer', text: 'Usually wanders near the reactor core in the lower decks.', time: '5 hours ago' }
+                { author: 'Speedy', text: 'She throws firefly jars. Watch out for fire damage!', time: '4 hours ago' }
             ]
         },
         {
-            id: 'boss-squibbly',
+            id: 'boss-peter-griffin',
             type: 'boss',
-            title: 'Squibbly (Boss)',
-            coords: [450, 600],
-            desc: 'Wanders the boardwalk at Squibbly Shores. Drops Squibbly\'s Combat Assault Rifle (Mythic).',
-            votes: 147,
+            title: 'Peter Griffin (Boss)',
+            coords: [441.6, 535.6],
+            desc: 'Located at the estate house in Snooty Steppes. Defeat him to get Peter Griffin\'s Hammer Pump Shotgun (Mythic) and his Society Medallion.',
+            votes: 789,
             rate: 100,
             comments: [
-                { author: 'TfueClon', text: 'Easiest boss to snipe from the ocean hills.', time: '3 days ago' }
+                { author: 'FamilyGuyFan', text: 'He does the bird is the word dance if you get knocked! Hilarious.', time: '10 mins ago' }
             ]
         },
         {
-            id: 'boss-zadie',
+            id: 'boss-nisha',
             type: 'boss',
-            title: 'Zadie (Boss)',
-            coords: [1000, 800],
-            desc: 'Patrols the dense woodlands north of Squibbly Shores. Drops Zadie\'s Suppressed SMG (Mythic).',
-            votes: 94,
+            title: 'Nisha (Boss)',
+            coords: [675.3, 922.7],
+            desc: 'Located in the gardens of Fencing Fields. Defeat her to get Nisha\'s Striker Assault Rifle (Mythic) and her Society Medallion.',
+            votes: 611,
             rate: 100,
             comments: [
-                { author: 'ShadowX', text: 'Hard to locate, she uses active camo.', time: '12 hours ago' }
+                { author: 'StrikerLover', text: 'Best AR in the game right now. She has really good aim, use cover.', time: '3 hours ago' }
+            ]
+        },
+        {
+            id: 'boss-montague',
+            type: 'boss',
+            title: 'Montague (Boss)',
+            coords: [1082.6, 1716.1],
+            desc: 'Located inside the Grand Glacier hotel. Defeat him to get Montague\'s Enforcer Assault Rifle (Mythic) and his Society Medallion.',
+            votes: 356,
+            rate: 100,
+            comments: [
+                { author: 'SniperScope', text: 'He spawns on the top floor of the hotel balcony.', time: '12 hours ago' }
             ]
         },
 
-        // Rare Chests
+        // Vaults (Guaranteed high tier weapons and rare chests)
         {
-            id: 'rare-chest-piano',
+            id: 'vault-lavish',
+            type: 'vault',
+            title: 'Lavish Lair Society Vault',
+            coords: [1425.0, 955.0],
+            desc: 'Requires Oscar\'s Medallion to unlock. Contains multiple rare chests, weapon mod bench, and guaranteed legendary items.',
+            votes: 450,
+            rate: 100,
+            comments: [
+                { author: 'ModderX', text: 'Has a weapon modification bench inside. Mod your weapons here!', time: '1 hour ago' }
+            ]
+        },
+        {
+            id: 'vault-fencing',
+            type: 'vault',
+            title: 'Fencing Fields Society Vault',
+            coords: [690.0, 930.0],
+            desc: 'Requires Nisha\'s Medallion to unlock. Down in the basement wine cellar. Contains high tier loot chest spawns.',
+            votes: 399,
+            rate: 100,
+            comments: [
+                { author: 'WineCellar', text: 'Behind the brick wall in the main cellar room.', time: '5 hours ago' }
+            ]
+        },
+        {
+            id: 'vault-grand',
+            type: 'vault',
+            title: 'Grand Glacier Society Vault',
+            coords: [1090.0, 1730.0],
+            desc: 'Requires Montague\'s Medallion to unlock. Located in the hotel basement.',
+            votes: 211,
+            rate: 100,
+            comments: [
+                { author: 'SnowyLoot', text: 'Perfect setup after killing Montague.', time: '3 days ago' }
+            ]
+        },
+
+        // Rare Chests (Confirmed Spawns)
+        {
+            id: 'rare-chest-ruined',
             type: 'rare-chest',
-            title: 'Guaranteed Rare Chest (Piano Room)',
-            coords: [1100, 1300],
-            desc: 'Located underground in the New Sanctuary tunnels. Break the bookshelf in the piano parlor room to access.',
-            votes: 310,
+            title: 'Guaranteed Rare Chest (Ruined Reels)',
+            coords: [960.0, 915.0],
+            desc: 'Hidden inside the brick tunnel beneath the main amphitheater screen structure.',
+            votes: 342,
             rate: 98,
             comments: [
-                { author: 'FortniteGG_enjoyer', text: '100% spawn rate in my last 15 games.', time: '30 mins ago' },
-                { author: 'Valkyrie', text: 'Watch out, lots of players land here now.', time: '4 hours ago' }
+                { author: 'RuinsExplorer', text: 'Under the floorboards in the projector room.', time: '20 mins ago' }
             ]
         },
         {
-            id: 'rare-chest-clawsy',
+            id: 'rare-chest-roost',
             type: 'rare-chest',
-            title: 'Drawer Rare Chest (Clawsy Lodge)',
-            coords: [350, 1100],
-            desc: 'Disguised as a dresser/drawer on the second floor of Clawsy Lodge south house. Destroy the painting next to it to open.',
-            votes: 172,
-            rate: 85,
-            comments: [
-                { author: 'SlickRick', text: 'Sometimes it spawns as a normal chest, but rare chest rate is very high.', time: '2 days ago' }
-            ]
-        },
-        {
-            id: 'rare-chest-tower',
-            type: 'rare-chest',
-            title: 'Fortress Peak Rare Chest',
-            coords: [1750, 420],
-            desc: 'At the very top of the watchtower in Frigid Fortress, buried under a snow pile. Use your pickaxe to clear the snow.',
-            votes: 245,
-            rate: 90,
-            comments: [
-                { author: 'ColdZone', text: 'Great start spot if you can glide straight to the tower peak.', time: '1 day ago' }
-            ]
-        },
-
-        // Legendary Drops / Exotics
-        {
-            id: 'legendary-weapon-barracks',
-            type: 'legendary-weapon',
-            title: 'Confirmed Legendary Heavy Sniper Spawn',
-            coords: [1300, 1650],
-            desc: 'Found inside the central hangar box at Builder\'s Barracks. Can be purchased from the Weapon Omat NPC for 400 gold.',
-            votes: 183,
+            title: 'Rebel\'s Roost Attic Rare Chest',
+            coords: [1610.0, 608.0],
+            desc: 'Located at the very top attic space in the main ruined mansion. Break the wooden ceiling to climb up.',
+            votes: 195,
             rate: 92,
             comments: [
-                { author: 'ScopeGod', text: 'NPC spawns there consistently unless killed by storm.', time: '1 day ago' }
+                { author: 'RebelLoot', text: 'Highly active landing spot, but guaranteed high tier sniper or shield.', time: '8 hours ago' }
             ]
         },
         {
-            id: 'exotic-weapon-fisherman',
-            type: 'exotic-weapon',
-            title: 'Chug Cannon (Exotic)',
-            coords: [280, 520],
-            desc: 'Sold by the Fisherman NPC on the pier at Squibbly Shores for 600 Gold.',
-            votes: 202,
-            rate: 95,
+            id: 'rare-chest-yacht',
+            type: 'rare-chest',
+            title: 'The Marigold Yacht Rare Chest',
+            coords: [992.2, 321.6],
+            desc: 'Located in the captain\'s cabin room on the second deck of The Marigold yacht.',
+            votes: 289,
+            rate: 94,
             comments: [
-                { author: 'SupportMain', text: 'Crucial for squad heals. Best rotation drop.', time: '6 hours ago' }
-            ]
-        },
-        {
-            id: 'exotic-weapon-shadow',
-            type: 'exotic-weapon',
-            title: 'Shadow Tracker Pistol (Exotic)',
-            coords: [1050, 1450],
-            desc: 'Sold by Agent Jonesy NPC inside the sanctuary main hall for 400 gold.',
-            votes: 121,
-            rate: 100,
-            comments: [
-                { author: 'PistolPete', text: 'Extremely good for pinging opponents through walls.', time: '8 hours ago' }
+                { author: 'Sailor', text: 'Right next to the golden vault door.', time: '4 hours ago' }
             ]
         },
 
-        // Vaults
+        // Exotic / Legendary Weapon Sellers
         {
-            id: 'vault-sanctuary',
-            type: 'vault',
-            title: 'New Sanctuary High-Tier Vault',
-            coords: [1020, 1200],
-            desc: 'Base level of New Sanctuary. Requires Vault Keycard dropped by the woodland bosses, or a teammate to dual-scan.',
-            votes: 388,
-            rate: 100,
+            id: 'exotic-chug-cannon',
+            type: 'exotic-weapon',
+            title: 'Chug Cannon Exotic Spawn',
+            coords: [822.0, 546.8],
+            desc: 'Can be purchased from the NPC at Pleasant Piazza for 600 Gold bars.',
+            votes: 412,
+            rate: 96,
             comments: [
-                { author: 'VaultHunter', text: 'Contains 3 Rare Chests and 4 Normal Chests inside!', time: '1 hour ago' }
+                { author: 'Medic', text: 'Best item for support players. Heals 15 shield/health per shot!', time: '1 hour ago' }
             ]
         },
         {
-            id: 'vault-frigid',
-            type: 'vault',
-            title: 'Frigid Fortress Vault',
-            coords: [1550, 580],
-            desc: 'Sub-level dungeon under the Frigid Fortress. Needs the Ice King\'s keycard.',
-            votes: 290,
+            id: 'legendary-grapple-blade',
+            type: 'legendary-weapon',
+            title: 'Grapple Blade (Legendary Rarity)',
+            coords: [1569.8, 1375.7],
+            desc: 'Can be purchased from the Trainer NPC at Classy Courts for 400 Gold bars.',
+            votes: 219,
             rate: 100,
             comments: [
-                { author: 'IceCap', text: 'Guaranteed 2 Legendary items inside standard chests.', time: '3 days ago' }
+                { author: 'SpiderMan', text: 'Infinite mobility, great for getting up the steep mountains.', time: '3 hours ago' }
             ]
         }
     ];
 
     // POIs list for search auto-complete/navigation
     const pois = [
-        { name: 'Frigid Fortress', coords: [1600, 500] },
-        { name: 'Dark Dominion', coords: [600, 1500] },
-        { name: 'Squibbly Shores', coords: [450, 600] },
-        { name: 'New Sanctuary', coords: [1100, 1300] },
-        { name: 'Builder\'s Barracks', coords: [1300, 1650] },
-        { name: 'Clawsy Lodge', coords: [350, 1100] }
+        { name: 'Lavish Lair', coords: [1417.5, 940.5] },
+        { name: 'Reckless Railways', coords: [1097.5, 1343.7] },
+        { name: 'Snooty Steppes', coords: [441.6, 535.6] },
+        { name: 'Fencing Fields', coords: [675.3, 922.7] },
+        { name: 'Grand Glacier', coords: [1082.6, 1716.1] },
+        { name: 'Ruined Reels', coords: [960.0, 915.0] },
+        { name: 'Rebel\'s Roost', coords: [1610.0, 608.0] },
+        { name: 'Classy Courts', coords: [1569.8, 1375.7] }
     ];
 
     // Initialize local storage markers list if not present
