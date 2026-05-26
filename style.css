@@ -1,0 +1,633 @@
+:root {
+    --bg-dark: #0b0c10;
+    --bg-panel: rgba(21, 23, 30, 0.75);
+    --border-color: rgba(255, 255, 255, 0.08);
+    --text-primary: #f5f6fa;
+    --text-secondary: #a0aec0;
+    --accent: #ffd700;
+    --accent-glow: rgba(255, 215, 0, 0.2);
+    
+    /* Marker category colors */
+    --color-rare-chest: #ffd700;
+    --color-legendary: #ff8c00;
+    --color-exotic: #00ffff;
+    --color-boss: #ff3366;
+    --color-vault: #7b2cbf;
+    
+    --transition-speed: 0.3s;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Outfit', sans-serif;
+    background-color: var(--bg-dark);
+    color: var(--text-primary);
+    overflow: hidden;
+    height: 100vh;
+}
+
+/* Scrollbar styles */
+::-webkit-scrollbar {
+    width: 6px;
+}
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.app-container {
+    display: flex;
+    height: 100vh;
+    width: 100vw;
+}
+
+/* Sidebar Styling */
+.sidebar {
+    width: 380px;
+    background-color: #0d0f13;
+    border-right: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    z-index: 10;
+    overflow-y: auto;
+    backdrop-filter: blur(10px);
+}
+
+.sidebar-header {
+    padding: 24px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.logo-icon {
+    font-size: 24px;
+    color: var(--color-exotic);
+    text-shadow: 0 0 10px rgba(0, 255, 255, 0.4);
+}
+
+.logo h1 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: 1px;
+}
+
+.logo h1 span {
+    color: var(--color-legendary);
+}
+
+.subtitle {
+    font-size: 12px;
+    color: var(--text-secondary);
+    margin-top: 4px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+/* Filters */
+.filter-section {
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.filter-section h2 {
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 16px;
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.filter-options {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.filter-btn {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 12px 16px;
+    color: var(--text-primary);
+    font-family: inherit;
+    font-weight: 600;
+    text-align: left;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    transition: all var(--transition-speed) ease;
+}
+
+.filter-btn i {
+    font-size: 16px;
+    color: var(--accent-color, var(--text-secondary));
+}
+
+.filter-btn:hover {
+    background: rgba(255, 255, 255, 0.08);
+    transform: translateX(4px);
+    border-color: var(--accent-color, var(--text-secondary));
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.05);
+}
+
+.filter-btn.active {
+    background: rgba(255, 255, 255, 0.06);
+    border-color: var(--accent-color, var(--color-exotic));
+}
+
+.filter-btn.inactive {
+    opacity: 0.4;
+    border-color: transparent;
+}
+
+/* Details Panel */
+.details-panel {
+    flex-grow: 1;
+    padding: 24px;
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+}
+
+.panel-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    height: 100%;
+    color: var(--text-secondary);
+    gap: 16px;
+}
+
+.placeholder-icon {
+    font-size: 48px;
+    opacity: 0.3;
+}
+
+.animate-pulse {
+    animation: pulse 2s infinite alternate;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); opacity: 0.3; }
+    100% { transform: scale(1.1); opacity: 0.6; }
+}
+
+.hidden {
+    display: none !important;
+}
+
+.loot-header {
+    margin-bottom: 16px;
+}
+
+.loot-badge {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 800;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+}
+
+.loot-badge.rare-chest { background: rgba(255, 215, 0, 0.15); color: var(--color-rare-chest); border: 1px solid var(--color-rare-chest); }
+.loot-badge.legendary-weapon { background: rgba(255, 140, 0, 0.15); color: var(--color-legendary); border: 1px solid var(--color-legendary); }
+.loot-badge.exotic-weapon { background: rgba(0, 255, 255, 0.15); color: var(--color-exotic); border: 1px solid var(--color-exotic); }
+.loot-badge.boss { background: rgba(255, 51, 102, 0.15); color: var(--color-boss); border: 1px solid var(--color-boss); }
+.loot-badge.vault { background: rgba(123, 44, 191, 0.15); color: var(--color-vault); border: 1px solid var(--color-vault); }
+
+#lootTitle {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.coordinates {
+    display: block;
+    font-size: 12px;
+    color: var(--text-secondary);
+    margin-top: 4px;
+    font-family: monospace;
+}
+
+#lootDesc {
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--text-secondary);
+    margin-bottom: 20px;
+}
+
+.community-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.stat-card {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 12px;
+    text-align: center;
+}
+
+.stat-num {
+    display: block;
+    font-size: 18px;
+    font-weight: 800;
+    color: var(--text-primary);
+}
+
+.stat-label {
+    font-size: 10px;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Verification Actions */
+.verification-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.btn {
+    border: none;
+    border-radius: 8px;
+    padding: 10px 16px;
+    font-family: inherit;
+    font-weight: 600;
+    font-size: 13px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all var(--transition-speed) ease;
+}
+
+.btn-verify {
+    background: rgba(46, 204, 113, 0.15);
+    color: #2ecc71;
+    border: 1px solid rgba(46, 204, 113, 0.3);
+}
+.btn-verify:hover {
+    background: #2ecc71;
+    color: #fff;
+    box-shadow: 0 0 15px rgba(46, 204, 113, 0.4);
+}
+
+.btn-flag {
+    background: rgba(231, 76, 60, 0.15);
+    color: #e74c3c;
+    border: 1px solid rgba(231, 76, 60, 0.3);
+}
+.btn-flag:hover {
+    background: #e74c3c;
+    color: #fff;
+    box-shadow: 0 0 15px rgba(231, 76, 60, 0.4);
+}
+
+/* Comments section */
+.feedback-section h4 {
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text-secondary);
+    margin-bottom: 12px;
+}
+
+.comments-list {
+    max-height: 150px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 12px;
+    padding-right: 4px;
+}
+
+.comment-item {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--border-color);
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 13px;
+}
+
+.comment-meta {
+    display: flex;
+    justify-content: space-between;
+    font-size: 10px;
+    color: var(--text-secondary);
+    margin-bottom: 4px;
+}
+
+.comment-author {
+    font-weight: 600;
+}
+
+.comment-text {
+    line-height: 1.4;
+}
+
+.comment-form {
+    display: flex;
+    gap: 8px;
+}
+
+.comment-form input {
+    flex-grow: 1;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    padding: 8px 12px;
+    color: #fff;
+    font-family: inherit;
+    font-size: 13px;
+}
+
+.comment-form input:focus {
+    outline: none;
+    border-color: var(--color-exotic);
+}
+
+.btn-send {
+    background: var(--color-exotic);
+    color: var(--bg-dark);
+    padding: 8px 12px;
+    border-radius: 6px;
+}
+
+/* Add custom marker panel */
+.add-marker-panel {
+    padding: 24px;
+    background: rgba(255, 255, 255, 0.01);
+    border-top: 1px solid var(--border-color);
+}
+
+.add-marker-panel h3 {
+    font-size: 14px;
+    margin-bottom: 6px;
+    color: var(--text-primary);
+}
+
+.add-marker-panel p {
+    font-size: 12px;
+    color: var(--text-secondary);
+    line-height: 1.4;
+    margin-bottom: 12px;
+}
+
+.form-group {
+    margin-bottom: 12px;
+}
+
+.form-group label {
+    display: block;
+    font-size: 11px;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    margin-bottom: 4px;
+    font-weight: 600;
+}
+
+.form-group select,
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    padding: 8px 12px;
+    color: #fff;
+    font-family: inherit;
+    font-size: 13px;
+}
+
+.form-group select:focus,
+.form-group input:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: var(--color-exotic);
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 8px;
+    margin-top: 16px;
+}
+
+.btn-submit-marker {
+    background: var(--color-legendary);
+    color: #fff;
+}
+.btn-submit-marker:hover {
+    box-shadow: 0 0 10px rgba(255, 140, 0, 0.4);
+}
+
+.btn-cancel-marker {
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text-secondary);
+}
+
+/* Map Wrapper & Leaflet */
+.map-wrapper {
+    flex-grow: 1;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+.topbar {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    right: 20px;
+    height: 54px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    z-index: 1000;
+    pointer-events: none;
+}
+
+.search-box {
+    background: var(--bg-panel);
+    border: 1px solid var(--border-color);
+    border-radius: 27px;
+    padding: 0 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 320px;
+    height: 100%;
+    pointer-events: auto;
+    backdrop-filter: blur(12px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.search-box i {
+    color: var(--text-secondary);
+}
+
+.search-box input {
+    background: transparent;
+    border: none;
+    color: #fff;
+    font-family: inherit;
+    font-size: 14px;
+    width: 100%;
+}
+
+.search-box input:focus {
+    outline: none;
+}
+
+.season-badge {
+    background: var(--bg-panel);
+    border: 1px solid var(--border-color);
+    border-radius: 27px;
+    padding: 0 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    height: 100%;
+    font-size: 13px;
+    font-weight: 700;
+    pointer-events: auto;
+    backdrop-filter: blur(12px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.live-indicator {
+    width: 8px;
+    height: 8px;
+    background-color: #2ecc71;
+    border-radius: 50%;
+    box-shadow: 0 0 8px #2ecc71;
+    animation: beacon 1.5s infinite alternate;
+}
+
+@keyframes beacon {
+    0% { transform: scale(1); opacity: 0.6; }
+    100% { transform: scale(1.4); opacity: 1; }
+}
+
+#map {
+    width: 100%;
+    flex-grow: 1;
+    background-color: var(--bg-dark);
+}
+
+/* Custom Marker Styling */
+.custom-leaflet-marker {
+    background: none;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.marker-pin-outer {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 15px currentColor;
+    background-color: rgba(11, 12, 16, 0.85);
+    border: 2px solid currentColor;
+    transition: transform var(--transition-speed) ease;
+}
+
+.marker-pin-outer:hover {
+    transform: scale(1.2);
+}
+
+.marker-pin-outer.rare-chest { color: var(--color-rare-chest); }
+.marker-pin-outer.legendary-weapon { color: var(--color-legendary); }
+.marker-pin-outer.exotic-weapon { color: var(--color-exotic); }
+.marker-pin-outer.boss { color: var(--color-boss); }
+.marker-pin-outer.vault { color: var(--color-vault); }
+
+.marker-pin-outer i {
+    font-size: 14px;
+}
+
+/* Leaflet Overrides */
+.leaflet-bar {
+    border: 1px solid var(--border-color) !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3) !important;
+}
+.leaflet-bar a {
+    background-color: var(--bg-panel) !important;
+    color: var(--text-primary) !important;
+    border-bottom: 1px solid var(--border-color) !important;
+    backdrop-filter: blur(12px);
+    transition: background-color 0.2s;
+}
+.leaflet-bar a:hover {
+    background-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+/* Map Coordinates HUD */
+.map-hud {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    background: var(--bg-panel);
+    border: 1px solid var(--border-color);
+    padding: 8px 16px;
+    border-radius: 8px;
+    display: flex;
+    gap: 16px;
+    font-family: monospace;
+    font-size: 12px;
+    z-index: 1000;
+    pointer-events: none;
+    backdrop-filter: blur(12px);
+}
+
+.hud-item {
+    display: flex;
+    gap: 6px;
+}
+
+.hud-label {
+    color: var(--text-secondary);
+}
+
+.hud-val {
+    color: var(--color-exotic);
+    font-weight: bold;
+}

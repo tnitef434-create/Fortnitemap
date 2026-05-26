@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fortnite Chapter 7 Season 2 Interactive Loot Map</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Space+Grotesk:wght@400;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Premium Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Leaflet Map CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar Navigation & Filters -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <i class="fa-solid fa-crosshairs logo-icon"></i>
+                    <h1>FORTNITE<span>.GG-CLONE</span></h1>
+                </div>
+                <p class="subtitle">Chapter 7 Season 2 - Showdown Map</p>
+            </div>
+
+            <!-- Category Filters -->
+            <div class="filter-section">
+                <h2><i class="fa-solid fa-sliders"></i> Map Filters</h2>
+                <div class="filter-options">
+                    <button class="filter-btn active" data-filter="all">
+                        <i class="fa-solid fa-border-all"></i> All Markers
+                    </button>
+                    <button class="filter-btn active" data-filter="rare-chest" style="--accent-color: #ffd700;">
+                        <i class="fa-solid fa-gem"></i> Rare Chests
+                    </button>
+                    <button class="filter-btn active" data-filter="legendary-weapon" style="--accent-color: #ff8c00;">
+                        <i class="fa-solid fa-gun"></i> Legendary Drops
+                    </button>
+                    <button class="filter-btn active" data-filter="exotic-weapon" style="--accent-color: #00ffff;">
+                        <i class="fa-solid fa-wand-magic-sparkles"></i> Exotic Weapons
+                    </button>
+                    <button class="filter-btn active" data-filter="boss" style="--accent-color: #ff3366;">
+                        <i class="fa-solid fa-skull"></i> Mythic Bosses
+                    </button>
+                    <button class="filter-btn active" data-filter="vault" style="--accent-color: #7b2cbf;">
+                        <i class="fa-solid fa-vault"></i> High-Tier Vaults
+                    </button>
+                </div>
+            </div>
+
+            <!-- Stats/Loot Info Panel -->
+            <div class="details-panel" id="detailsPanel">
+                <div class="panel-placeholder">
+                    <i class="fa-solid fa-map-location-dot placeholder-icon animate-pulse"></i>
+                    <p>Select a marker on the map to view loot rates, coordinates, and community reviews.</p>
+                </div>
+                <div class="panel-content hidden" id="panelContent">
+                    <div class="loot-header">
+                        <span class="loot-badge" id="lootBadge">Rare Chest</span>
+                        <h3 id="lootTitle">POI Name</h3>
+                        <span class="coordinates" id="lootCoords">[0.00, 0.00]</span>
+                    </div>
+                    <div class="loot-body">
+                        <p id="lootDesc">Description goes here.</p>
+                        
+                        <div class="community-stats">
+                            <div class="stat-card">
+                                <span class="stat-num" id="spawnRate">95%</span>
+                                <span class="stat-label">Confirmed Rate</span>
+                            </div>
+                            <div class="stat-card">
+                                <span class="stat-num" id="votesCount">142</span>
+                                <span class="stat-label">Verified Votes</span>
+                            </div>
+                        </div>
+
+                        <!-- Verification Interaction Buttons -->
+                        <div class="verification-actions">
+                            <button class="btn btn-verify" id="btnVerify">
+                                <i class="fa-solid fa-thumbs-up"></i> Confirm Active
+                            </button>
+                            <button class="btn btn-flag" id="btnFlag">
+                                <i class="fa-solid fa-circle-exclamation"></i> Flag Missing
+                            </button>
+                        </div>
+
+                        <!-- Community Feedback Section -->
+                        <div class="feedback-section">
+                            <h4><i class="fa-regular fa-comment-dots"></i> Community Comments</h4>
+                            <div class="comments-list" id="commentsList">
+                                <!-- Dynamic Comments -->
+                            </div>
+                            <form class="comment-form" id="commentForm">
+                                <input type="text" id="commentInput" placeholder="Share your drop experience..." required>
+                                <button type="submit" class="btn btn-send"><i class="fa-solid fa-paper-plane"></i></button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Add Custom Marker Section -->
+            <div class="add-marker-panel">
+                <h3><i class="fa-solid fa-circle-plus"></i> Found a new spot?</h3>
+                <p>Click anywhere on the map to place a custom chest, weapon, or boss marker.</p>
+                <div id="addMarkerFormContainer" class="hidden">
+                    <form id="addMarkerForm">
+                        <div class="form-group">
+                            <label for="markerType">Type</label>
+                            <select id="markerType" required>
+                                <option value="rare-chest">Rare Chest</option>
+                                <option value="legendary-weapon">Legendary Weapon</option>
+                                <option value="exotic-weapon">Exotic Weapon</option>
+                                <option value="boss">Mythic Boss</option>
+                                <option value="vault">Vault</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="markerTitle">Title/Weapon Name</label>
+                            <input type="text" id="markerTitle" placeholder="e.g. Dark Voyager's Obliterator" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="markerDesc">Description / Spawn Condition</label>
+                            <textarea id="markerDesc" rows="2" placeholder="e.g. Found behind the breakdown wall in the basement" required></textarea>
+                        </div>
+                        <div class="form-row">
+                            <button type="submit" class="btn btn-submit-marker">Save Marker</button>
+                            <button type="button" class="btn btn-cancel-marker" id="btnCancelMarker">Cancel</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Map Area -->
+        <main class="map-wrapper">
+            <!-- Top bar -->
+            <header class="topbar">
+                <div class="search-box">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" id="poiSearch" placeholder="Search POIs (Frigid Fortress, Squibbly Shores...)" autocomplete="off">
+                </div>
+                <div class="season-badge">
+                    <span class="live-indicator"></span>
+                    <span>SEASON ACTIVE: Chapter 7, Season 2</span>
+                </div>
+            </header>
+
+            <!-- Leaflet Container -->
+            <div id="map"></div>
+
+            <!-- Map HUD Coordinates Overlay -->
+            <div class="map-hud">
+                <div class="hud-item">
+                    <span class="hud-label">LAT:</span>
+                    <span class="hud-val" id="hudLat">0.0</span>
+                </div>
+                <div class="hud-item">
+                    <span class="hud-label">LNG:</span>
+                    <span class="hud-val" id="hudLng">0.0</span>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <!-- App Logic -->
+    <script src="app.js"></script>
+</body>
+</html>
